@@ -8,5 +8,5 @@ import java.io.IOException;
 public interface IStorageService {
     String saveFile(MultipartFile file);
     void deleteFile(String fileName);
-    File getFile(String fileName) throws IOException;
+
 }

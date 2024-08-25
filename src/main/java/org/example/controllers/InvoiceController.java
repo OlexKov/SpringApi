@@ -1,5 +1,6 @@
 package org.example.controllers;
 
+import jakarta.validation.Valid;
 import org.example.dtos.InvoiceDto;
 import org.example.exceptions.InvoiceNotFoundException;
 import org.example.interfaces.IInvoiceService;
@@ -8,6 +9,7 @@ import org.example.models.InvoiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,11 +23,14 @@ public class InvoiceController {
     private IInvoiceService invoiceService;
 
     @PostMapping(value = "/create", consumes = "multipart/form-data")
-    public ResponseEntity<Long> saveInvoice(@ModelAttribute InvoiceCreationModel invoiceModel) {
+    public ResponseEntity<String> saveInvoice(@Valid @ModelAttribute InvoiceCreationModel invoiceModel,BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors().toString());
+        }
         try{
-            return new ResponseEntity<>(invoiceService.saveInvoice( invoiceModel),HttpStatus.OK);
+            return ResponseEntity.ok().body(invoiceService.saveInvoice(invoiceModel).toString());
         }catch(Exception e){
-            return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
@@ -37,15 +42,18 @@ public class InvoiceController {
     @GetMapping("/get/{id}")
     public ResponseEntity<InvoiceDto> getInvoiceById(@PathVariable Long id) {
         InvoiceDto invoiceDto = invoiceService.getInvoiceById(id);
-        return invoiceDto != null ? new ResponseEntity<>(invoiceDto, HttpStatus.OK)
-                                  : new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return invoiceDto != null ? ResponseEntity.ok().body(invoiceDto)
+                                  : ResponseEntity.notFound().build();
     }
 
     @PutMapping(value = "/update",consumes = "multipart/form-data")
-    public ResponseEntity<Long> updateInvoice(@ModelAttribute InvoiceCreationModel invoiceModel ) {
+    public ResponseEntity<String> updateInvoice( @Valid @ModelAttribute InvoiceCreationModel invoiceModel ,BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors().toString());
+        }
         try{
-            return invoiceService.updateInvoice(invoiceModel) ? new ResponseEntity<>(invoiceModel.getId(),HttpStatus.OK)
-                                                              : new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+            return invoiceService.updateInvoice(invoiceModel) ? ResponseEntity.ok().body(invoiceModel.getId().toString())
+                                                              : ResponseEntity.badRequest().body("Invalid invoice id");
         }
         catch (Exception e){
             return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
@@ -55,8 +63,8 @@ public class InvoiceController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteInvoice(@PathVariable Long id) {
         try {
-          return  invoiceService.deleteInvoiceById(id) ?  new ResponseEntity<>(null,HttpStatus.OK)
-                                                       :  new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+          return  invoiceService.deleteInvoiceById(id) ?  ResponseEntity.ok().body(null)
+                                                       :  ResponseEntity.badRequest().body("Invalid invoice id");
         } catch (InvoiceNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }

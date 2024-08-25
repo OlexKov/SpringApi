@@ -6,6 +6,7 @@ import org.example.interfaces.IStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.naming.spi.DirectoryManager;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,12 +17,12 @@ import java.util.Objects;
 @Service
 public class StorangeService implements IStorageService {
     private final Path filesDirPath;
-    private final String filesDir = "target/files";
+    private final String filesDir = "src/main/resources/upload/files";
     public  StorangeService() throws IOException {
         filesDirPath = Paths.get(filesDir);
         if(!Files.exists(filesDirPath)){
             try {
-                Files.createDirectory(filesDirPath);
+                Files.createDirectories(filesDirPath);
             }
             catch (IOException e) {
                 throw new StorageException("Could not initialize storage", e);
@@ -29,6 +30,7 @@ public class StorangeService implements IStorageService {
 
         }
     }
+
     @Override
     public String saveFile(MultipartFile file) {
         try {
@@ -69,10 +71,5 @@ public class StorangeService implements IStorageService {
             }
         }
         else throw new StorageException("File name not be empty");
-    }
-
-    @Override
-    public File getFile(String fileName) throws IOException {
-         return    new File(filesDir + "/" + fileName);
     }
 }
