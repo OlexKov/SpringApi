@@ -2,7 +2,7 @@ package org.example.services;
 
 import org.example.exceptions.StorageException;
 import org.apache.commons.io.FilenameUtils;
-import org.example.interfaces.ISorangeService;
+import org.example.interfaces.IStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,7 +14,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
 @Service
-public class StorangeService implements ISorangeService {
+public class StorangeService implements IStorageService {
     private final Path filesDirPath;
     private final String filesDir = "target/files";
     public  StorangeService() throws IOException {

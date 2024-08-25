@@ -4,9 +4,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
-public interface ISorangeService {
+public interface IStorageService {
     String saveFile(MultipartFile file);
     void deleteFile(String fileName);
     File getFile(String fileName) throws IOException;
