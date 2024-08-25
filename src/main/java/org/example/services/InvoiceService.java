@@ -19,6 +19,7 @@ import java.util.Optional;
 public class InvoiceService implements IInvoiceService {
     @Autowired
     private InvoiceRepository repo;
+    @Autowired
     private IStorageService storageService;
 
     @Override
@@ -68,7 +69,7 @@ public class InvoiceService implements IInvoiceService {
         if(isPresent){
             Invoice invoice = InvoiceMapper.formCreationModel(invoiceModel);
             if(!invoiceModel.getFile().isEmpty() ){
-                storageService.deleteFile(invoice.getFileName());
+                storageService.deleteFile(optInvoice.get().getFileName());
                 invoice.setFileName(storageService.saveFile(invoiceModel.getFile()));
             }
             repo.save(invoice);
