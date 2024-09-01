@@ -2,6 +2,7 @@ package org.example.services;
 
 import org.example.dtos.InvoiceDto;
 import org.example.entities.Invoice;
+import org.example.exceptions.InvoiceNotFoundException;
 import org.example.interfaces.IInvoiceService;
 import org.example.interfaces.IStorageService;
 import org.example.interfaces.InvoiceRepository;
@@ -21,11 +22,14 @@ public class InvoiceService implements IInvoiceService {
     private InvoiceRepository repo;
     @Autowired
     private IStorageService storageService;
+    @Autowired
+    private InvoiceMapper mapper;
+
 
     @Override
     public Long saveInvoice(InvoiceCreationModel invoiceModel) {
         try{
-            Invoice invoice = InvoiceMapper.formCreationModel(invoiceModel);
+            Invoice invoice = mapper.formCreationModel(invoiceModel);
             invoice.setFileName(storageService.saveFile(invoiceModel.getFile()));
             Invoice savedInvoice = repo.save(invoice);
             return savedInvoice.getId();
@@ -40,14 +44,20 @@ public class InvoiceService implements IInvoiceService {
         PageRequest pageRequest = PageRequest.of(
                 page, size, Sort.by("name").descending());
         Page<Invoice> invoicesPage = repo.findAll(pageRequest);
-        Iterable<InvoiceDto> invoices = InvoiceMapper.toDto(invoicesPage.getContent());
+        Iterable<InvoiceDto> invoices = mapper.toDto(invoicesPage.getContent());
         return  new InvoiceResponse(invoices,invoicesPage.getTotalElements());
     }
 
     @Override
     public InvoiceDto getInvoiceById(Long id) {
         Optional<Invoice> invoice = repo.findById(id);
-        return invoice.map(InvoiceMapper::toDto).orElse(null);
+        if(invoice.isPresent()){
+            return mapper.toDto(invoice.get());
+        }
+        else{
+            throw new InvoiceNotFoundException("Invalid invoice id");
+        }
+
     }
 
     @Override
@@ -67,7 +77,7 @@ public class InvoiceService implements IInvoiceService {
         Optional<Invoice> optInvoice = repo.findById(invoiceModel.getId());
         boolean isPresent = optInvoice.isPresent();
         if(isPresent){
-            Invoice invoice = InvoiceMapper.formCreationModel(invoiceModel);
+            Invoice invoice = mapper.formCreationModel(invoiceModel);
             if(!invoiceModel.getFile().isEmpty() ){
                 storageService.deleteFile(optInvoice.get().getFileName());
                 invoice.setFileName(storageService.saveFile(invoiceModel.getFile()));
