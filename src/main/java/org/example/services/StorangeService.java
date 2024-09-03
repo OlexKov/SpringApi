@@ -20,8 +20,8 @@ import java.util.UUID;
 @Service
 public class StorangeService implements IStorageService {
     private final Path filesDirPath,imageDirPath;
-    private final String filesDir = "src/main/resources/upload/files";
-    private final String imagesDir = "src/main/resources/upload/images";
+    private final String filesDir = "src/main/resources/public/files";
+    private final String imagesDir = "src/main/resources/public/images";
     private final int [] sizes = {32,150,300,600,1200};
     public  StorangeService() throws IOException {
         filesDirPath = Paths.get(filesDir);
