@@ -11,7 +11,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // Вказуємо маршрути, на які діє CORS
-                        .allowedOrigins("http://example.com") // Дозволені домени
+                        .allowedOrigins("*") // Дозволені домени
                         .allowedMethods("GET", "POST", "PUT", "DELETE") // Дозволені HTTP методи
                         .allowedHeaders("*") // Дозволені заголовки
                         .allowCredentials(true); // Дозвіл на відправку cookies
