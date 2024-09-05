@@ -34,8 +34,13 @@ public class CategoryController {
     }
 
     @GetMapping("/get/{page}/{size}/{name}")
-    public CategoryResponse getAllInvoices(@PathVariable int page, @PathVariable int size, @PathVariable String name) {
+    public CategoryResponse getCategoriesByName(@PathVariable int page, @PathVariable int size, @PathVariable String name) {
         return categoryService.getCategoryByName(page,size,name);
+    }
+
+    @GetMapping("/get/{page}/{size}")
+    public CategoryResponse getCategories(@PathVariable int page, @PathVariable int size) {
+        return categoryService.getCategories(page,size);
     }
 
     @GetMapping("/get/{id}")

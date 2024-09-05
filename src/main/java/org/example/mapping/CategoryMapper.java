@@ -6,10 +6,12 @@ import org.example.models.CategoryCreationModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
     @Mapping(target = "image", ignore = true)
     Category fromCreationModel(CategoryCreationModel categoryModel);
     CategoryDto toDto(Category category);
-    Iterable<CategoryDto> toDto(Iterable<Category> category);
+    List<CategoryDto> toDto(Iterable<Category> category);
 }

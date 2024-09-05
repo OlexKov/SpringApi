@@ -10,9 +10,10 @@ import org.example.models.InvoiceResponse;
 import java.io.IOException;
 
 public interface ICategoryService {
-    public Long saveCategory(CategoryCreationModel categoryModel);
-    public CategoryResponse getCategoryByName(int page,int size,String name) ;
-    public CategoryDto getCategoryById(Long id);
-    public boolean deleteCategoryById(Long id) throws IOException;
-    public boolean updateCategory(CategoryCreationModel categoryModel) throws IOException;
+    Long saveCategory(CategoryCreationModel categoryModel);
+    CategoryResponse getCategoryByName(int page,int size,String name) ;
+    CategoryResponse getCategories(int page,int size);
+    CategoryDto getCategoryById(Long id);
+    boolean deleteCategoryById(Long id) throws IOException;
+    boolean updateCategory(CategoryCreationModel categoryModel) throws IOException;
 }
