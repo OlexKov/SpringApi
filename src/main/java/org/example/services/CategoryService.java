@@ -56,7 +56,7 @@ public class CategoryService implements ICategoryService {
 
     public CategoryResponse getCategories(int page,int size) {
         PageRequest pageRequest = PageRequest.of(
-                page, size);
+                page, size,Sort.by("id").and(Sort.by("name")));
         Page<Category> categoriesPage = repo.findAll(pageRequest);
         Iterable<CategoryDto> categories = mapper.toDto(categoriesPage.getContent());
         return  new CategoryResponse(categories,categoriesPage.getTotalElements());
