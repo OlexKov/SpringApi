@@ -25,7 +25,6 @@ public class InvoiceService implements IInvoiceService {
     @Autowired
     private InvoiceMapper mapper;
 
-
     @Override
     public Long saveInvoice(InvoiceCreationModel invoiceModel) {
         try{
