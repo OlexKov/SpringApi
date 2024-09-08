@@ -5,7 +5,7 @@ import org.example.dtos.InvoiceDto;
 import org.example.exceptions.InvoiceNotFoundException;
 import org.example.interfaces.IInvoiceService;
 import org.example.models.InvoiceCreationModel;
-import org.example.models.InvoiceResponse;
+import org.example.models.PaginationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +35,7 @@ public class InvoiceController {
     }
 
     @GetMapping("/get/{page}/{size}")
-    public InvoiceResponse getAllInvoices(@PathVariable int page, @PathVariable int size) {
+    public PaginationResponse<InvoiceDto> getAllInvoices(@PathVariable int page, @PathVariable int size) {
          return invoiceService.getInvoices(page,size);
     }
 

@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,12 +20,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class StorangeService implements IStorageService {
+public class StorageService implements IStorageService {
     private final Path filesDirPath,imageDirPath;
     private final String filesDir = "src/main/resources/public/files";
     private final String imagesDir = "src/main/resources/public/images";
     private final int [] sizes = {32,150,300,600,1200};
-    public  StorangeService() throws IOException {
+    public StorageService() throws IOException {
         filesDirPath = Paths.get(filesDir);
         imageDirPath = Paths.get(imagesDir);
         if(!Files.exists(filesDirPath)){
@@ -81,18 +83,29 @@ public class StorangeService implements IStorageService {
             try {
                 Files.deleteIfExists(filePath);
             }
-            catch (IOException e) {
-
-            }
+            catch (IOException ignored) { }
         }
         else throw new StorageException("File name not be empty");
     }
 
     @Override
     public String saveImage(MultipartFile file, FileFormats format) throws IOException {
+        var bufferedImage = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
+        return saveBufferedImage(bufferedImage,format);
+    }
+
+    @Override
+    public String saveImage(String fileUrl, FileFormats format) throws IOException {
+        try (InputStream inputStream = new URL(fileUrl).openStream()) {
+            BufferedImage bufferedImage = ImageIO.read(inputStream);
+            return saveBufferedImage(bufferedImage, format);
+        }
+    }
+
+    @Override
+    public String saveBufferedImage(BufferedImage bufferedImage, FileFormats format) throws IOException {
         String ext = format.name().toLowerCase();
         String randomFileName = UUID.randomUUID().toString()+"."+ext;
-        var bufferedImage = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
         for (var size : sizes) {
             String fileSave = imagesDir +"/"+size+"_"+randomFileName;
             Thumbnails.of(bufferedImage).size(size, size).outputFormat(ext).toFile(fileSave);
@@ -109,11 +122,8 @@ public class StorangeService implements IStorageService {
                 try {
                     Files.deleteIfExists(imagePath);
                 }
-                catch (IOException ignored) {
-
-                }
+                catch (IOException ignored) {}
             }
-
         }
         else throw new StorageException("File name not be empty");
     }

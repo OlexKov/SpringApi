@@ -5,7 +5,7 @@ import org.example.dtos.CategoryDto;
 import org.example.exceptions.InvoiceNotFoundException;
 import org.example.interfaces.ICategoryService;
 import org.example.models.CategoryCreationModel;
-import org.example.models.CategoryResponse;
+import org.example.models.PaginationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,12 +34,12 @@ public class CategoryController {
     }
 
     @GetMapping("/get/{page}/{size}/{name}")
-    public CategoryResponse getCategoriesByName(@PathVariable int page, @PathVariable int size, @PathVariable String name) {
+    public PaginationResponse<CategoryDto> getCategoriesByName(@PathVariable int page, @PathVariable int size, @PathVariable String name) {
         return categoryService.getCategoryByName(page,size,name);
     }
 
     @GetMapping("/get/{page}/{size}")
-    public CategoryResponse getCategories(@PathVariable int page, @PathVariable int size) {
+    public PaginationResponse<CategoryDto> getCategories(@PathVariable int page, @PathVariable int size) {
         return categoryService.getCategories(page,size);
     }
 

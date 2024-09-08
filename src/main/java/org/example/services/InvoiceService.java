@@ -8,7 +8,7 @@ import org.example.interfaces.IStorageService;
 import org.example.interfaces.InvoiceRepository;
 import org.example.mapping.InvoiceMapper;
 import org.example.models.InvoiceCreationModel;
-import org.example.models.InvoiceResponse;
+import org.example.models.PaginationResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -39,12 +39,12 @@ public class InvoiceService implements IInvoiceService {
     }
 
     @Override
-    public InvoiceResponse getInvoices(int page, int size) {
+    public PaginationResponse<InvoiceDto> getInvoices(int page, int size) {
         PageRequest pageRequest = PageRequest.of(
                 page, size, Sort.by("name").descending());
         Page<Invoice> invoicesPage = repo.findAll(pageRequest);
         Iterable<InvoiceDto> invoices = mapper.toDto(invoicesPage.getContent());
-        return  new InvoiceResponse(invoices,invoicesPage.getTotalElements());
+        return  new PaginationResponse<InvoiceDto>(invoices,invoicesPage.getTotalElements());
     }
 
     @Override

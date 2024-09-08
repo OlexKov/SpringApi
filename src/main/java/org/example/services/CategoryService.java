@@ -1,9 +1,7 @@
 package org.example.services;
 
 import org.example.dtos.CategoryDto;
-import org.example.dtos.InvoiceDto;
 import org.example.entities.Category;
-import org.example.entities.Invoice;
 import org.example.exceptions.CategoryException;
 import org.example.interfaces.ICategoryRepository;
 import org.example.interfaces.ICategoryService;
@@ -11,8 +9,7 @@ import org.example.interfaces.IStorageService;
 import org.example.mapping.CategoryMapper;
 import org.example.models.FileFormats;
 import org.example.models.CategoryCreationModel;
-import org.example.models.CategoryResponse;
-import org.example.models.InvoiceResponse;
+import org.example.models.PaginationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -49,17 +46,17 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public CategoryResponse getCategoryByName(int page,int size,String name) {
+    public PaginationResponse<CategoryDto> getCategoryByName(int page, int size, String name) {
         Page<Category> categoryPage = repo.findByNameContainingIgnoreCase(name, PageRequest.of(page, size));
-        return new CategoryResponse(mapper.toDto(categoryPage.getContent()),categoryPage.getTotalElements());
+        return new PaginationResponse<CategoryDto>(mapper.toDto(categoryPage.getContent()),categoryPage.getTotalElements());
     }
 
-    public CategoryResponse getCategories(int page,int size) {
+    public PaginationResponse<CategoryDto> getCategories(int page,int size) {
         PageRequest pageRequest = PageRequest.of(
                 page, size,Sort.by("id").and(Sort.by("name")));
         Page<Category> categoriesPage = repo.findAll(pageRequest);
         Iterable<CategoryDto> categories = mapper.toDto(categoriesPage.getContent());
-        return  new CategoryResponse(categories,categoriesPage.getTotalElements());
+        return  new PaginationResponse<CategoryDto>(categories,categoriesPage.getTotalElements());
     }
 
     @Override
@@ -95,7 +92,7 @@ public class CategoryService implements ICategoryService {
             category.setCreationTime(LocalDateTime.now());
             if(categoryModel.getFile()!=null && !categoryModel.getFile().isEmpty() ){
                 storageService.deleteImage(optCategory.get().getImage());
-                String imageName = storageService.saveImage(categoryModel.getFile(),FileFormats.JPG);
+                String imageName = storageService.saveImage(categoryModel.getFile(),FileFormats.WEBP);
                 category.setImage(imageName);
             }
             repo.save(category);

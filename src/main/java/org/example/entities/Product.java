@@ -6,15 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-//import java.util.Date;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="tbl_categories")
-public class Category {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Table(name="tbl_product")
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(length = 200, nullable = false)
@@ -28,4 +28,11 @@ public class Category {
 
     @Column(name="date_created")
     private LocalDateTime creationTime;
+
+    @Column(nullable = false,precision = 2)
+    private double price;
+
+    @Column(nullable = false,precision = 2)
+    private double discount;
+
 }
