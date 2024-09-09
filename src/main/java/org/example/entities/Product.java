@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -20,9 +21,6 @@ public class Product {
     @Column(length = 200, nullable = false)
     private String name;
 
-    @Column(length = 200)
-    private String image;
-
     @Column(length = 4000)
     private String description;
 
@@ -34,5 +32,12 @@ public class Product {
 
     @Column(nullable = false,precision = 2)
     private double discount;
+
+    @ManyToOne
+    @JoinColumn(name="category_id", nullable = false)
+    private Category category;
+
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+    private List<ProductImage> images;
 
 }

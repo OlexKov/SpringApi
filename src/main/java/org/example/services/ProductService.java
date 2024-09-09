@@ -32,7 +32,7 @@ public class ProductService implements IProductService {
         try{
             Product product = mapper.fromCreationModel(productModel);
             String imageName = storageService.saveImage(productModel.getFile(), FileFormats.JPG);
-            product.setImage(imageName);
+          //  product.setImage(imageName);
             product.setCreationTime(LocalDateTime.now());
             Product savedProduct = repo.save(product);
             return savedProduct.getId();
@@ -69,7 +69,7 @@ public class ProductService implements IProductService {
         if(isPresent){
             Product product = optCategory.get();
             repo.delete(product);
-            storageService.deleteImage(product.getImage());
+          //  storageService.deleteImage(product.getImage());
         }
         return  isPresent;
     }
@@ -80,12 +80,12 @@ public class ProductService implements IProductService {
         boolean isPresent = optProduct.isPresent();
         if(isPresent){
             Product product = mapper.fromCreationModel( productModel);
-            product.setImage(optProduct.get().getImage());
+          //  product.setImage(optProduct.get().getImage());
             product.setCreationTime(LocalDateTime.now());
             if( productModel.getFile()!=null && ! productModel.getFile().isEmpty() ){
-                storageService.deleteImage(optProduct.get().getImage());
-                String imageName = storageService.saveImage( productModel.getFile(),FileFormats.WEBP);
-                product.setImage(imageName);
+                //storageService.deleteImage(optProduct.get().getImage());
+               // String imageName = storageService.saveImage( productModel.getFile(),FileFormats.WEBP);
+               // product.setImage(imageName);
             }
             repo.save(product);
         }
