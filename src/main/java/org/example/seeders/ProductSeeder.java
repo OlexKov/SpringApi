@@ -21,12 +21,10 @@ import java.util.List;
 @Component
 public class ProductSeeder implements CommandLineRunner {
 
-    private final IProductRepository productRepository;
     private final ICategoryRepository categoryRepository;
     private final IStorageService storageService;
     private final Faker faker = new Faker();
     public ProductSeeder(IProductRepository productRepository,IStorageService storageService,ICategoryRepository categoryRepository) {
-        this.productRepository = productRepository;
         this.storageService = storageService;
         this.categoryRepository = categoryRepository;
     }
@@ -65,7 +63,6 @@ public class ProductSeeder implements CommandLineRunner {
                                         LocalDateTime.now(),
                                         false,
                                         product)
-
                         );
                     }
                     product.setImages(images);
