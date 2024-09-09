@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProductCreationModel {
     private Long id;
     private String name;
-    private MultipartFile file;
+    private MultipartFile[] files;
     private String description;
     private double price;
     private double discount;

@@ -31,7 +31,7 @@ public class ProductService implements IProductService {
     public Long saveProduct(ProductCreationModel productModel) {
         try{
             Product product = mapper.fromCreationModel(productModel);
-            String imageName = storageService.saveImage(productModel.getFile(), FileFormats.JPG);
+           // String imageName = storageService.saveImage(productModel.getFile(), FileFormats.JPG);
           //  product.setImage(imageName);
             product.setCreationTime(LocalDateTime.now());
             Product savedProduct = repo.save(product);
@@ -82,11 +82,11 @@ public class ProductService implements IProductService {
             Product product = mapper.fromCreationModel( productModel);
           //  product.setImage(optProduct.get().getImage());
             product.setCreationTime(LocalDateTime.now());
-            if( productModel.getFile()!=null && ! productModel.getFile().isEmpty() ){
+          //  if( productModel.getFile()!=null && ! productModel.getFile().isEmpty() ){
                 //storageService.deleteImage(optProduct.get().getImage());
                // String imageName = storageService.saveImage( productModel.getFile(),FileFormats.WEBP);
                // product.setImage(imageName);
-            }
+           // }
             repo.save(product);
         }
         return isPresent;

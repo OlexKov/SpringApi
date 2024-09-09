@@ -9,7 +9,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
-    @Mapping(target = "image", ignore = true)
     Product fromCreationModel(ProductCreationModel productModel);
     ProductDto toDto(Product product);
     List<ProductDto> toDto(Iterable<Product> product);

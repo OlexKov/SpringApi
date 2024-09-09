@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class StorageService implements IStorageService {
@@ -96,10 +97,10 @@ public class StorageService implements IStorageService {
 
     @Override
     public String saveImage(String fileUrl, FileFormats format) throws IOException {
-        try (InputStream inputStream = new URL(fileUrl).openStream()) {
-            BufferedImage bufferedImage = ImageIO.read(inputStream);
-            return saveBufferedImage(bufferedImage, format);
-        }
+         try (InputStream inputStream = new URL(fileUrl).openStream()) {
+                BufferedImage bufferedImage = ImageIO.read(inputStream);
+                return saveBufferedImage(bufferedImage, format);
+         }
     }
 
     @Override
