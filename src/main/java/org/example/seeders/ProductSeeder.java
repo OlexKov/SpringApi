@@ -24,7 +24,7 @@ public class ProductSeeder implements CommandLineRunner {
     private final ICategoryRepository categoryRepository;
     private final IStorageService storageService;
     private final Faker faker = new Faker();
-    public ProductSeeder(IProductRepository productRepository,IStorageService storageService,ICategoryRepository categoryRepository) {
+    public ProductSeeder(IStorageService storageService,ICategoryRepository categoryRepository) {
         this.storageService = storageService;
         this.categoryRepository = categoryRepository;
     }
