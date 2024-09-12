@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class PaginationResponse<T>  {
-    private Iterable<T> invoicesList;
+    private Iterable<T> itemsList;
     private long totalElements ;
 }

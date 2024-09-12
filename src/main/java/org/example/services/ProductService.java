@@ -106,8 +106,8 @@ public class ProductService implements IProductService {
 
             var existingImages = new ArrayList<>(Arrays.stream(oldImages).filter(x -> Arrays.stream(productModel.getImages())
                             .anyMatch(z -> Objects.equals(z.getId(), x.getId())))
-                    .sorted(Comparator.comparing(ProductImage::getId))
-                    .toList());
+                            .sorted(Comparator.comparing(ProductImage::getId))
+                            .toList());
 
             var modelImages = Arrays.stream(productModel.getImages()).sorted(Comparator.comparing(ProductCreationImage::getId)).toList();
             for (int i = 0; i < modelImages.size(); i++) {
