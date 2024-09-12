@@ -14,4 +14,5 @@ public interface IStorageService {
     String saveImage(String fileUrl, FileFormats format) throws IOException;
     String saveBufferedImage(BufferedImage bufferedImage, FileFormats format) throws IOException;
     void deleteImage(String imageName) throws IOException;
+    void deleteImages(Iterable<String> imageNames) throws IOException;
 }

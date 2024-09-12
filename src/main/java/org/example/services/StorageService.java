@@ -128,4 +128,11 @@ public class StorageService implements IStorageService {
         }
         else throw new StorageException("File name not be empty");
     }
+
+    @Override
+    public void deleteImages(Iterable<String> imageNames) throws IOException {
+        for(String name:imageNames){
+            deleteImage(name);
+        }
+    }
 }

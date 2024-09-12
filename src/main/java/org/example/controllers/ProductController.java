@@ -6,6 +6,7 @@ import org.example.exceptions.InvoiceNotFoundException;
 import org.example.interfaces.IProductService;
 import org.example.models.PaginationResponse;
 import org.example.models.ProductCreationModel;
+import org.example.models.ProductUpdateModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +49,7 @@ public class ProductController {
     }
 
     @PutMapping(value = "/update",consumes = "multipart/form-data")
-    public ResponseEntity<String> updateProduct(@Valid @ModelAttribute ProductCreationModel productModel , BindingResult bindingResult) {
+    public ResponseEntity<String> updateProduct(@Valid @ModelAttribute ProductUpdateModel productModel , BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors().toString());
         }

@@ -1,18 +1,18 @@
-package org.example.dtos;
+package org.example.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
-public class ProductDto {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ProductModel {
     private Long id;
     private String name;
     private String description;
-    private LocalDateTime creationTime;
     private double price;
     private double discount;
-    private List<ProductImageDto> images;
     private Long categoryId;
 }
