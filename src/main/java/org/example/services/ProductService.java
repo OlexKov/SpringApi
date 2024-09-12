@@ -109,12 +109,10 @@ public class ProductService implements IProductService {
                     .sorted(Comparator.comparing(ProductImage::getId))
                     .toList());
 
-            if(!existingImages.isEmpty() && oldImages.length != existingImages.size()){
-                var modelImages = Arrays.stream(productModel.getImages()).sorted(Comparator.comparing(ProductCreationImage::getId)).toList();
-                for (int i = 0; i < modelImages.size(); i++) {
-                    existingImages.get(i).setPriority( modelImages.get(i).getPriority());
-                }
-           }
+            var modelImages = Arrays.stream(productModel.getImages()).sorted(Comparator.comparing(ProductCreationImage::getId)).toList();
+            for (int i = 0; i < modelImages.size(); i++) {
+                existingImages.get(i).setPriority( modelImages.get(i).getPriority());
+            }
 
             product.setCreationTime(LocalDateTime.now());
             if(productModel.getFiles()!=null) {
