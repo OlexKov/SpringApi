@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = {ProductImageMapper.class})
 public interface ProductMapper {
     Product fromCreationModel(ProductCreationModel productModel);
     @Mapping(target = "images", ignore = true)
@@ -18,8 +18,5 @@ public interface ProductMapper {
     @Mapping(target = "categoryId", source = "category.id")
     ProductDto toDto(Product product);
     List<ProductDto> toDto(Iterable<Product> product);
-
-    @Mapping(target = "productId", source = "product.id")
-    ProductImageDto toDto(ProductImage image);
 }
 
