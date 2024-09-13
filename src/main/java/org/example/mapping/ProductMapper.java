@@ -16,6 +16,7 @@ public interface ProductMapper {
     @Mapping(target = "images", ignore = true)
     Product fromUpdateModel(ProductUpdateModel productModel);
     @Mapping(target = "categoryId", source = "category.id")
+    @Mapping(target = "categoryName", source = "category.name")
     ProductDto toDto(Product product);
     List<ProductDto> toDto(Iterable<Product> product);
 }

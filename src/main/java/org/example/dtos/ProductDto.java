@@ -15,4 +15,5 @@ public class ProductDto {
     private double discount;
     private List<ProductImageDto> images;
     private Long categoryId;
+    private String categoryName;
 }

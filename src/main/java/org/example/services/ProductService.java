@@ -74,6 +74,16 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    public PaginationResponse<ProductDto> searchProducts(SearchData searchData) {
+
+        PageRequest pageRequest = PageRequest.of(
+                searchData.getPage()-1, searchData.getSize(), Sort.by(searchData.getSort()));
+        Page<Product> productsPage = repo.searchProducts(searchData.getName(),searchData.getCategory(),searchData.getDescription(),pageRequest);
+        Iterable<ProductDto> products = mapper.toDto(productsPage.getContent());
+        return  new PaginationResponse<ProductDto>(products,productsPage.getTotalElements());
+    }
+
+    @Override
     public ProductDto getProductById(Long id) {
         Optional<Product> product = repo.findById(id);
         if(product.isPresent()){

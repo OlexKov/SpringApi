@@ -7,7 +7,9 @@ import org.example.interfaces.IProductService;
 import org.example.models.PaginationResponse;
 import org.example.models.ProductCreationModel;
 import org.example.models.ProductUpdateModel;
+import org.example.models.SearchData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -41,6 +43,12 @@ public class ProductController {
         return productService.getProducts(page,size);
     }
 
+
+    @PostMapping(value ="/get",consumes = "multipart/form-data")
+    public PaginationResponse<ProductDto> searchProducts(@ModelAttribute SearchData searchData) {
+        return productService.searchProducts(searchData);
+    }
+
     @GetMapping("/get/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
         try {
@@ -51,6 +59,7 @@ public class ProductController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
+
 
     @PutMapping(value = "/update",consumes = "multipart/form-data")
     public ResponseEntity<String> updateProduct(@Valid @ModelAttribute ProductUpdateModel productModel , BindingResult bindingResult) {

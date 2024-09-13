@@ -5,6 +5,7 @@ import org.example.dtos.ProductDto;
 import org.example.models.PaginationResponse;
 import org.example.models.ProductCreationModel;
 import org.example.models.ProductUpdateModel;
+import org.example.models.SearchData;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 
@@ -12,6 +13,7 @@ import java.io.IOException;
 public interface IProductService {
     Long saveProduct(ProductCreationModel productModel);
     PaginationResponse<ProductDto> getProducts(int page,int size);
+    PaginationResponse<ProductDto> searchProducts(SearchData searchData);
     ProductDto getProductById(Long id);
     boolean deleteProductById(Long id) throws IOException;
     boolean updateProduct(ProductUpdateModel productModel) throws IOException;
