@@ -14,5 +14,5 @@ public class ProductImageDto {
     private String name;
     private int priority;
     private LocalDateTime dateCreated;
-    private int productId;
+    private Long productId;
 }

@@ -1,7 +1,9 @@
 package org.example.mapping;
 
 import org.example.dtos.ProductDto;
+import org.example.dtos.ProductImageDto;
 import org.example.entities.Product;
+import org.example.entities.ProductImage;
 import org.example.models.ProductCreationModel;
 import org.example.models.ProductUpdateModel;
 import org.mapstruct.Mapper;
@@ -16,5 +18,8 @@ public interface ProductMapper {
     @Mapping(target = "categoryId", source = "category.id")
     ProductDto toDto(Product product);
     List<ProductDto> toDto(Iterable<Product> product);
+
+    @Mapping(target = "productId", source = "product.id")
+    ProductImageDto toDto(ProductImage image);
 }
 
