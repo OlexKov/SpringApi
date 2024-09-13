@@ -43,9 +43,13 @@ public class ProductController {
 
     @GetMapping("/get/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
-        ProductDto productDto = productService.getProductById(id);
-        return productDto != null ? ResponseEntity.ok().body(productDto)
-                : ResponseEntity.notFound().build();
+        try {
+            ProductDto productDto = productService.getProductById(id);
+            return productDto != null ? ResponseEntity.ok().body(productDto)
+                    : ResponseEntity.notFound().build();
+        }catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping(value = "/update",consumes = "multipart/form-data")

@@ -67,7 +67,7 @@ public class ProductService implements IProductService {
     @Override
     public PaginationResponse<ProductDto> getProducts(int page, int size) {
         PageRequest pageRequest = PageRequest.of(
-                page, size, Sort.by("id").and(Sort.by("name")));
+                page, size, Sort.by("id"));
         Page<Product> productsPage = repo.findAll(pageRequest);
         Iterable<ProductDto> categories = mapper.toDto(productsPage.getContent());
         return  new PaginationResponse<ProductDto>(categories,productsPage.getTotalElements());
@@ -104,18 +104,22 @@ public class ProductService implements IProductService {
             Product product = mapper.fromUpdateModel(productModel);
             var oldImages = optProduct.get().getImages().toArray(ProductImage[]::new);
 
-            var existingImages = new ArrayList<>(Arrays.stream(oldImages).filter(x -> Arrays.stream(productModel.getImages())
-                            .anyMatch(z -> Objects.equals(z.getId(), x.getId())))
-                            .sorted(Comparator.comparing(ProductImage::getId))
-                            .toList());
+            var existingImages = new ArrayList<>(Arrays.stream(oldImages)
+                    .filter(x -> Arrays.stream(productModel.getImages())
+                    .anyMatch(z -> Objects.equals(z.getId(), x.getId())))
+                    .sorted(Comparator.comparing(ProductImage::getId))
+                    .toList());
 
-            var modelImages = Arrays.stream(productModel.getImages()).sorted(Comparator.comparing(ProductCreationImage::getId)).toList();
+            var modelImages = Arrays.stream(productModel.getImages())
+                    .sorted(Comparator.comparing(ProductCreationImage::getId))
+                    .toList();
+
             for (int i = 0; i < modelImages.size(); i++) {
                 existingImages.get(i).setPriority( modelImages.get(i).getPriority());
             }
 
             product.setCreationTime(LocalDateTime.now());
-            if(productModel.getFiles()!=null) {
+            if(productModel.getFiles() != null) {
                 for (var file : productModel.getFiles()) {
                     if (!file.getFile().isEmpty()) {
                         ProductImage image = new ProductImage(
@@ -130,6 +134,7 @@ public class ProductService implements IProductService {
                     }
                 }
             }
+
             product.setImages(existingImages);
             Optional<Category> category = categoryRepo.findById(productModel.getCategoryId());
             if(category.isPresent()){
@@ -139,10 +144,12 @@ public class ProductService implements IProductService {
                 throw new ProductException("Invalid category id");
             }
             repo.save(product);
-            var imageToDelete =  Arrays.stream(oldImages).filter(x->Arrays.stream(existingImages.toArray(ProductImage[]::new)).anyMatch(z-> !Objects.equals(z.getId(), x.getId()))).toArray(ProductImage[]::new);
+            var imageToDelete =  Arrays.stream(oldImages)
+                    .filter(x->Arrays.stream(existingImages.toArray(ProductImage[]::new))
+                            .anyMatch(z-> !Objects.equals(z.getId(), x.getId())))
+                    .toArray(ProductImage[]::new);
             imageRepo.deleteAll(List.of(imageToDelete));
             storageService.deleteImages(Arrays.stream(imageToDelete).map(ProductImage::getName).toList());
-
         }
         return isPresent;
     }
