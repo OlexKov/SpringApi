@@ -10,6 +10,12 @@ import org.springframework.web.multipart.MultipartFile;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductCreationModel extends ProductModel{
+public class ProductCreationModel{
+    private Long id;
+    private String name;
+    private String description;
+    private double price;
+    private double discount;
+    private Long categoryId;
     private MultipartFile[] files;
 }

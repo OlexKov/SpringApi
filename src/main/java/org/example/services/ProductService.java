@@ -34,6 +34,7 @@ public class ProductService implements IProductService {
     public Long saveProduct(ProductCreationModel productModel) {
         try{
             Product product = mapper.fromCreationModel(productModel);
+            product.setId(0L);
             List<ProductImage> images = new ArrayList<>();
             int index = 0;
             LocalDateTime date = LocalDateTime.now();
@@ -75,10 +76,10 @@ public class ProductService implements IProductService {
 
     @Override
     public PaginationResponse<ProductDto> searchProducts(SearchData searchData) {
-
+        Sort.Direction direction = Objects.equals(searchData.getSortDir(), "descend") ? Sort.Direction.DESC: Sort.Direction.ASC;
         PageRequest pageRequest = PageRequest.of(
-                searchData.getPage()-1, searchData.getSize(), Sort.by(searchData.getSort()));
-        Page<Product> productsPage = repo.searchProducts(searchData.getName(),searchData.getCategory(),searchData.getDescription(),pageRequest);
+                searchData.getPage()-1, searchData.getSize(), Sort.by(direction,searchData.getSort()));
+        Page<Product> productsPage = repo.searchProducts(searchData.getName(),searchData.getCategories(),searchData.getDescription(),pageRequest);
         Iterable<ProductDto> products = mapper.toDto(productsPage.getContent());
         return  new PaginationResponse<ProductDto>(products,productsPage.getTotalElements());
     }
@@ -101,65 +102,77 @@ public class ProductService implements IProductService {
         if(isPresent){
             Product product = optCategory.get();
             repo.delete(product);
-            storageService.deleteImages(product.getImages().stream().map(ProductImage::getName).toList());
+            storageService.deleteImages(product.getImages()
+                    .stream()
+                    .map(ProductImage::getName)
+                    .toList());
         }
         return  isPresent;
     }
 
     @Override
-    public boolean updateProduct(ProductUpdateModel productModel) throws IOException {
+    public boolean updateProduct(ProductCreationModel productModel) throws IOException {
         Optional<Product> optProduct = repo.findById( productModel.getId());
         boolean isPresent = optProduct.isPresent();
         if(isPresent){
-            Product product = mapper.fromUpdateModel(productModel);
-            var oldImages = optProduct.get().getImages().toArray(ProductImage[]::new);
-
-            var existingImages = new ArrayList<>(Arrays.stream(oldImages)
-                    .filter(x -> Arrays.stream(productModel.getImages())
-                    .anyMatch(z -> Objects.equals(z.getId(), x.getId())))
-                    .sorted(Comparator.comparing(ProductImage::getId))
-                    .toList());
-
-            var modelImages = Arrays.stream(productModel.getImages())
-                    .sorted(Comparator.comparing(ProductCreationImage::getId))
-                    .toList();
-
-            for (int i = 0; i < modelImages.size(); i++) {
-                existingImages.get(i).setPriority( modelImages.get(i).getPriority());
-            }
-
+            Product product = mapper.fromCreationModel(productModel);
+            var oldImages = new ArrayList<>(optProduct.get().getImages());
             product.setCreationTime(LocalDateTime.now());
+            List<ProductImage> newImagesList = new ArrayList<ProductImage>() ;
             if(productModel.getFiles() != null) {
+                int index = -1;
                 for (var file : productModel.getFiles()) {
-                    if (!file.getFile().isEmpty()) {
-                        ProductImage image = new ProductImage(
-                                0L,
-                                storageService.saveImage(file.getFile(), FileFormats.WEBP),
-                                file.getPriority(),
-                                LocalDateTime.now(),
-                                false,
-                                product
-                        );
-                        existingImages.add(image);
+                    index++;
+                    if(!Objects.equals(file.getContentType(), "old-image")){
+                        if(!file.isEmpty()){
+                            ProductImage image = new ProductImage(
+                                    0L,
+                                    storageService.saveImage(file, FileFormats.WEBP),
+                                    index,
+                                    LocalDateTime.now(),
+                                    false,
+                                    product
+                            );
+                            newImagesList.add(image);
+                        }
                     }
-                }
-            }
-
-            product.setImages(existingImages);
-            Optional<Category> category = categoryRepo.findById(productModel.getCategoryId());
-            if(category.isPresent()){
-                product.setCategory(category.get());
+                    else {
+                        var imageName = file.getOriginalFilename();
+                        var oldImage = Arrays.stream(oldImages.toArray(ProductImage[]::new))
+                                .filter(x-> Objects.equals(x.getName(), imageName))
+                                .findFirst();
+                        if(oldImage.isPresent()){
+                            var image = oldImage.get();
+                            oldImages.remove(image);
+                            image.setPriority(index);
+                            newImagesList.add(image);
+                        }
+                    }
+               }
+                product.setImages(newImagesList);
             }
             else{
-                throw new ProductException("Invalid category id");
+                throw new ProductException("Images is absent");
+            }
+            if(!Objects.equals(optProduct.get().getCategory().getId(), productModel.getCategoryId()))
+            {
+                Optional<Category> category = categoryRepo.findById(productModel.getCategoryId());
+                if(category.isPresent()){
+                    product.setCategory(category.get());
+                }
+                else{
+                    throw new ProductException("Invalid category id");
+                }
+            }
+            else{
+                product.setCategory(optProduct.get().getCategory());
             }
             repo.save(product);
-            var imageToDelete =  Arrays.stream(oldImages)
-                    .filter(x->Arrays.stream(existingImages.toArray(ProductImage[]::new))
-                            .anyMatch(z-> !Objects.equals(z.getId(), x.getId())))
-                    .toArray(ProductImage[]::new);
-            imageRepo.deleteAll(List.of(imageToDelete));
-            storageService.deleteImages(Arrays.stream(imageToDelete).map(ProductImage::getName).toList());
+            if(!oldImages.isEmpty()){
+                imageRepo.deleteAll(oldImages);
+                var imagesToDelete = Arrays.stream(oldImages.toArray(ProductImage[]::new)).map(ProductImage::getName).toList();
+                storageService.deleteImages(imagesToDelete);
+            }
         }
         return isPresent;
     }

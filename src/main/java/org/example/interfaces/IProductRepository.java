@@ -10,11 +10,12 @@ import org.springframework.data.repository.query.Param;
 
 public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
     @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%')) " +
-            "AND LOWER(p.category.name) LIKE LOWER(CONCAT('%', :category, '%')) " +
+            // "AND LOWER(p.category.name) LIKE LOWER(CONCAT('%', :category, '%')) " +
+            "AND LOWER(p.category.name) IN :categories " +
             "AND LOWER(p.description) LIKE LOWER(CONCAT('%', :description, '%'))")
     Page<Product> searchProducts(
             @Param("name") String name,
-            @Param("category") String category,
+            @Param("categories") String[] categories,
             @Param("description") String description,
             Pageable pageable);
 }

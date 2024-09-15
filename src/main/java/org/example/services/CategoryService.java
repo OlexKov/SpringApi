@@ -52,6 +52,7 @@ public class CategoryService implements ICategoryService {
     }
 
     public PaginationResponse<CategoryDto> getCategories(int page,int size) {
+        size = size==0?Integer.MAX_VALUE:size;
         PageRequest pageRequest = PageRequest.of(
                 page, size,Sort.by("id").and(Sort.by("name")));
         Page<Category> categoriesPage = repo.findAll(pageRequest);

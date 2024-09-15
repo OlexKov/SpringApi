@@ -11,7 +11,8 @@ public class SearchData {
   private int  page;
   private int  size ;
   private String  name ;
-  private String  category;
+  private String[]  categories;
   private String  description ;
   private String  sort ;
+  private String sortDir;
 }
