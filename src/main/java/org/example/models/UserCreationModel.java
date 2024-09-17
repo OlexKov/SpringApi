@@ -15,5 +15,4 @@ public class UserCreationModel {
     private String surname;
     private Date birthdate;
     private MultipartFile file;
-    private Set<String> roles;
 }

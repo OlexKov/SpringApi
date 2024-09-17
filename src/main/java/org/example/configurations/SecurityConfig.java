@@ -28,6 +28,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig{
 
       private final JwtAuthenticationFilter jwtAuthenticationFilter;
+      private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
       private final UserService userService;
 
     @Bean
@@ -36,7 +37,7 @@ public class SecurityConfig{
                 // Своего рода отключение CORS (разрешение запросов со всех доменов)
                 .cors(cors -> cors.configurationSource(request -> {
                     var corsConfiguration = new CorsConfiguration();
-                    corsConfiguration.setAllowedOrigins(List.of("*"));
+                    corsConfiguration.setAllowedOriginPatterns(List.of("*"));
                     corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     corsConfiguration.setAllowedHeaders(List.of("*"));
                     corsConfiguration.setAllowCredentials(true);
@@ -47,15 +48,17 @@ public class SecurityConfig{
                         // Можно указать конкретный путь, * - 1 уровень вложенности, ** - любое количество уровней вложенности
                         .requestMatchers(
                                 "/api/product/create",
-                                "/api/product/update",
+                                "/api/product/update/**",
                                 "/api/product/delete/**",
-                                "/api/product/create",
-                                "/api/category/update",
+                                "/api/category/create/**",
+                                "/api/category/update/**",
                                 "/api/category/delete/**").hasAuthority(Roles.Admin.toString())
                         .anyRequest().permitAll())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(customAuthenticationEntryPoint));
         return http.build();
     }
 

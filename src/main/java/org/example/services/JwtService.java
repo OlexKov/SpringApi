@@ -30,6 +30,8 @@ public class JwtService implements IJwtService {
             claims.put("name", user.getName());
             claims.put("surname", user.getSurname());
             claims.put("image", user.getImage());
+            claims.put("username", user.getUsername());
+            claims.put("birthdate", user.getBirthdate());
         }
         assert user != null;
         return generateToken(claims, user);

@@ -6,10 +6,12 @@ import org.example.entities.User;
 import org.example.entities.UserRole;
 import org.example.exceptions.UserException;
 import org.example.interfaces.IUserRepository;
+import org.example.interfaces.IUserRolesRepository;
 import org.example.interfaces.IUserService;
 import org.example.mapping.UserMapper;
 import org.example.models.FileFormats;
 import org.example.models.PaginationResponse;
+import org.example.models.Roles;
 import org.example.models.UserCreationModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +35,8 @@ public class UserService implements IUserService {
     private final UserMapper mapper;
     private final StorageService storageService;
     private final PasswordEncoder passwordEncoder =  new BCryptPasswordEncoder();
+    private final IUserRolesRepository rolesRepo;
+
     @Override
     public Long create(UserCreationModel userModel) {
         if(userRepo.getByUsername(userModel.getUsername()) != null)
@@ -45,7 +49,13 @@ public class UserService implements IUserService {
         }
 
         var user = mapper.fromCreationModel(userModel);
-        user.setRoles(userModel.getRoles().stream().map(x->new UserRole(0L, x, List.of())).collect(Collectors.toList()));
+        user.setRoles(List.of(rolesRepo.getByName(Roles.User.toString())));
+        //
+        user.setAccountNonExpired(true);
+        user.setAccountNonLocked(true);
+        user.setCredentialsNonExpired(true);
+        user.setEnabled(true);
+        //
         user.setPassword(passwordEncoder.encode(userModel.getPassword()));
         try{
             user.setImage(storageService.saveImage(userModel.getFile(), FileFormats.WEBP));
