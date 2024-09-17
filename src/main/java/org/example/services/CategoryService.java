@@ -1,5 +1,6 @@
 package org.example.services;
 
+import lombok.RequiredArgsConstructor;
 import org.example.dtos.CategoryDto;
 import org.example.entities.Category;
 import org.example.exceptions.CategoryException;
@@ -21,14 +22,11 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService implements ICategoryService {
-
-    @Autowired
-    private ICategoryRepository repo;
-    @Autowired
-    private IStorageService storageService;
-    @Autowired(required=true)
-    private CategoryMapper mapper;
+    private final ICategoryRepository repo;
+    private final IStorageService storageService;
+    private final CategoryMapper mapper;
 
     @Override
     public Long saveCategory(CategoryCreationModel categoryModel) {

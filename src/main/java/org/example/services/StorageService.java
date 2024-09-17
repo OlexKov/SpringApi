@@ -1,5 +1,6 @@
 package org.example.services;
 
+import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
 import org.example.exceptions.StorageException;
 import org.apache.commons.io.FilenameUtils;

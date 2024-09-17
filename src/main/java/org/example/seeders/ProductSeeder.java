@@ -1,6 +1,7 @@
 package org.example.seeders;
 
 import com.github.javafaker.Faker;
+import lombok.AllArgsConstructor;
 import org.example.entities.Category;
 import org.example.entities.Product;
 import org.example.entities.ProductImage;
@@ -20,15 +21,12 @@ import java.util.concurrent.Executors;
 
 
 @Component
+@AllArgsConstructor
 public class ProductSeeder implements CommandLineRunner {
 
     private final ICategoryRepository categoryRepository;
     private final IStorageService storageService;
     private final Faker faker = new Faker();
-    public ProductSeeder(IStorageService storageService,ICategoryRepository categoryRepository) {
-        this.storageService = storageService;
-        this.categoryRepository = categoryRepository;
-    }
 
     @Override
     public void run(String... args) throws IOException {
