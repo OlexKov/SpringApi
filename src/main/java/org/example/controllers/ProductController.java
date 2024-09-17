@@ -77,7 +77,7 @@ public class ProductController {
     public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
         try {
             return  productService.deleteProductById(id) ?  ResponseEntity.ok().body(null)
-                    :  ResponseEntity.badRequest().body("Invalid invoice id");
+                    :  ResponseEntity.badRequest().body("Invalid product id");
         } catch (InvoiceNotFoundException | IOException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }

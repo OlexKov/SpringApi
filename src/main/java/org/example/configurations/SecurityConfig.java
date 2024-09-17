@@ -46,18 +46,13 @@ public class SecurityConfig{
                 .authorizeHttpRequests(request -> request
                         // Можно указать конкретный путь, * - 1 уровень вложенности, ** - любое количество уровней вложенности
                         .requestMatchers(
-                                "/api/product/get/**",
-                                "/api/category/get/**",
-                                "/api/auth/**").permitAll()
-                        .requestMatchers(
                                 "/api/product/create",
                                 "/api/product/update",
-                                "/api/product/delete",
+                                "/api/product/delete/**",
                                 "/api/product/create",
                                 "/api/category/update",
-                                "/api/category/delete").hasAuthority(Roles.Admin.toString()))
-
-                        //.anyRequest().authenticated())
+                                "/api/category/delete/**").hasAuthority(Roles.Admin.toString())
+                        .anyRequest().permitAll())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
