@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 public interface IStorageService {
+    void init() throws IOException;
     String saveFile(MultipartFile file);
     void deleteFile(String fileName);
     String saveImage(MultipartFile file, FileFormats format) throws IOException;

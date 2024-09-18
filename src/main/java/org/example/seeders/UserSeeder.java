@@ -9,9 +9,7 @@ import org.example.interfaces.IUserRepository;
 import org.example.interfaces.IUserRolesRepository;
 import org.example.models.FileFormats;
 import org.example.models.Roles;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -29,13 +27,16 @@ public class UserSeeder implements CommandLineRunner {
     public void run(String... args) throws Exception {
         var roles = Roles.values();
         if(roleRepo.count() < roles.length){
+            System.out.println("Сид ролей!");
             List<UserRole> userRoles = new ArrayList<>();
             for (var role:roles){
                 userRoles.add(new UserRole(0L,role.toString(),List.of()));
             }
             roleRepo.saveAll(userRoles);
+            System.out.println("Сид ролей завершено!");
         }
         if(userRepo.count()==0){
+            System.out.println("Сид юзерів!");
             var adminRole = roleRepo.getByName(Roles.Admin.toString());
            userRepo.save(new User(
                     0L,
@@ -49,6 +50,7 @@ public class UserSeeder implements CommandLineRunner {
                     true,true,true,true,
                     List.of(adminRole)
             ) );
+            System.out.println("Сид юзерів завершено!");
         }
 
     }

@@ -13,6 +13,7 @@ import org.example.models.FileFormats;
 import org.example.models.PaginationResponse;
 import org.example.models.Roles;
 import org.example.models.UserCreationModel;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -34,8 +35,8 @@ public class UserService implements IUserService {
     private final IUserRepository userRepo;
     private final UserMapper mapper;
     private final StorageService storageService;
-    private final PasswordEncoder passwordEncoder =  new BCryptPasswordEncoder();
     private final IUserRolesRepository rolesRepo;
+    private final PasswordEncoder passwordEncoder = passwordEncoder();
 
     @Override
     public Long create(UserCreationModel userModel) {
@@ -123,5 +124,10 @@ public class UserService implements IUserService {
     @Override
     public boolean update(UserCreationModel productModel) throws IOException {
         return false;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

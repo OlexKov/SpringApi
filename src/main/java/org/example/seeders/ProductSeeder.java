@@ -31,6 +31,7 @@ public class ProductSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws IOException {
         if (categoryRepository.count() == 0) {
+            System.out.println("Сид бази даних!");
             int categoryCount = 10;
             int productsPerCategoryCount = 5;
             int imagesPerProductCount = 3;
