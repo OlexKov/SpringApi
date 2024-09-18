@@ -51,12 +51,22 @@ public class JwtService implements IJwtService {
     // Отримання ім'я користувача з токена
     public String extractUserName(String token) {
         Claims claims = extractAllClaims(token);
-        return claims.getSubject();
+        if(claims != null){
+            return claims.getSubject();
+        }
+        else{
+            return null;
+        }
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
         final Claims claims = extractAllClaims(token);
-        return claimsResolvers.apply(claims);
+        if(claims != null){
+            return claimsResolvers.apply(claims);
+        }
+        else{
+            return null;
+        }
     }
 
     // Валідація токена
@@ -74,11 +84,15 @@ public class JwtService implements IJwtService {
     }
 
     public Claims extractAllClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+        Claims claims = null;
+        try{
+            claims = Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+        } catch (Exception ignored) {}
+        return claims;
     }
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(JWT_SECRET));

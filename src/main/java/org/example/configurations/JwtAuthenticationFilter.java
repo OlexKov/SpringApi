@@ -33,28 +33,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws IOException, ServletException {
 
         String token = getJwtFromRequest(request);
-        try{
-            var username = jwtService.extractUserName(token);
-            if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
-                User user = userRepo.getByUsername(username);
-                if (jwtService.isTokenValid(token, user)) {
-                    SecurityContext context = SecurityContextHolder.createEmptyContext();
+        var username = jwtService.extractUserName(token);
+        if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
+            User user = userRepo.getByUsername(username);
+            if (jwtService.isTokenValid(token, user)) {
+                SecurityContext context = SecurityContextHolder.createEmptyContext();
 
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            user,
-                            null,
-                            user.getAuthorities()
-                    );
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        user,
+                        null,
+                        user.getAuthorities()
+                );
 
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    context.setAuthentication(authToken);
-                    SecurityContextHolder.setContext(context);
-                }
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                context.setAuthentication(authToken);
+                SecurityContextHolder.setContext(context);
             }
         }
-        finally {
-            chain.doFilter(request, response);
-        }
+        chain.doFilter(request, response);
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {
