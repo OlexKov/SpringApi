@@ -37,8 +37,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             var username = jwtService.extractUserName(token);
             if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
                 User user = userRepo.getByUsername(username);
-
-                // Если токен валиден, то аутентифицируем пользователя
                 if (jwtService.isTokenValid(token, user)) {
                     SecurityContext context = SecurityContextHolder.createEmptyContext();
 
