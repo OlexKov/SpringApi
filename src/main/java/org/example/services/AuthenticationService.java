@@ -1,7 +1,6 @@
 package org.example.services;
 
 import lombok.RequiredArgsConstructor;
-import org.example.entities.User;
 import org.example.interfaces.IAuthenticationService;
 import org.example.interfaces.IJwtService;
 import org.example.interfaces.IUserService;
