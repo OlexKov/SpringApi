@@ -46,9 +46,9 @@ public class SecurityConfig{
                 }))
                 // Налаштування доступу
                 .authorizeHttpRequests(request -> request
-                        // Можно указать конкретный путь, * - 1 уровень вложенности, ** - любое количество уровней вложенности
+                        // Можна вказати конкретний шлях, * - 1 рівень вкладеності , ** - будь яка кількість рівнів вкладеності
                         .requestMatchers(
-                                "/api/product/create",
+                                "/api/product/create/**",
                                 "/api/product/update/**",
                                 "/api/product/delete/**",
                                 "/api/category/create/**",

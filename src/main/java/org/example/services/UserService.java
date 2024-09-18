@@ -24,10 +24,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +34,7 @@ public class UserService implements IUserService {
     private final UserMapper mapper;
     private final StorageService storageService;
     private final IUserRolesRepository rolesRepo;
-    private final PasswordEncoder passwordEncoder = passwordEncoder();
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Long create(UserCreationModel userModel) {
@@ -124,10 +122,5 @@ public class UserService implements IUserService {
     @Override
     public boolean update(UserCreationModel productModel) throws IOException {
         return false;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
