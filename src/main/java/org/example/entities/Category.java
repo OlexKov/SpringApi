@@ -30,6 +30,6 @@ public class Category {
     @Column(name="date_created")
     private LocalDateTime creationTime;
 
-    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Product> products;
 }
