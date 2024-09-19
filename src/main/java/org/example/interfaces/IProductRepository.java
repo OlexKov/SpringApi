@@ -21,4 +21,7 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
             @Param("categories") String[] categories,
             @Param("description") String description,
             Pageable pageable);
+
+    @EntityGraph(attributePaths = {"category", "images"})
+    Page<Product> findAll(Pageable pageable);
 }
