@@ -1,6 +1,5 @@
 package org.example.seeders;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.example.entities.User;
 import org.example.entities.UserRole;
@@ -39,7 +38,7 @@ public class UserSeeder implements CommandLineRunner {
             System.out.println("Сид юзерів!");
             var adminRole = roleRepo.getByName(Roles.Admin.toString());
             var userRole = roleRepo.getByName(Roles.User.toString());
-            var users = new ArrayList<User>(Arrays.asList(
+            var users = new ArrayList<>(Arrays.asList(
                     new User(
                             0L,
                             "Admin",
