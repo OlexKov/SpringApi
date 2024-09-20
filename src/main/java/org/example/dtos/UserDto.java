@@ -1,10 +1,13 @@
 package org.example.dtos;
 
-import lombok.Data;
+
+import lombok.Getter;
+import lombok.Setter;
 import java.util.Date;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 public class UserDto {
     private Long id;
     private String username;

@@ -6,7 +6,6 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Entity
 @Table(name = "tbl_user_roles")
 @Getter

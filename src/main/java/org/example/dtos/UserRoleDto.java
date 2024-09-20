@@ -1,8 +1,10 @@
 package org.example.dtos;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class UserRoleDto {
     private Long id;
     private String name;
