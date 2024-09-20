@@ -38,18 +38,33 @@ public class UserSeeder implements CommandLineRunner {
         if(userRepo.count()==0){
             System.out.println("Сид юзерів!");
             var adminRole = roleRepo.getByName(Roles.Admin.toString());
-           userRepo.save(new User(
-                    0L,
-                    "Admin",
-                    passwordEncoder.encode("Admin_1"),
-                    "Alex",
-                    "Fox",
-                    "Admin_1@gmail.com",
-                    new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime(),
-                    storageService.saveImage("https://picsum.photos/800/600", FileFormats.WEBP),
-                    true,true,true,true,
-                    List.of(adminRole)
-            ) );
+            var userRole = roleRepo.getByName(Roles.User.toString());
+            var users = new ArrayList<User>(Arrays.asList(
+                    new User(
+                            0L,
+                            "Admin",
+                            passwordEncoder.encode("Admin_1"),
+                            "Alex",
+                            "Fox",
+                            "Admin_1@gmail.com",
+                            new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime(),
+                            storageService.saveImage("https://picsum.photos/800/600", FileFormats.WEBP),
+                            true,true,true,true,
+                            List.of(adminRole)
+                    ),
+                    new User(
+                            0L,
+                            "Ivan",
+                            passwordEncoder.encode("Ivan_1"),
+                            "Іван",
+                            "Вознюк",
+                            "Ivan@gmail.com",
+                            new GregorianCalendar(2000, Calendar.APRIL, 1).getTime(),
+                            storageService.saveImage("https://picsum.photos/800/600", FileFormats.WEBP),
+                            true,true,true,true,
+                            List.of(userRole)
+                    )));
+            userRepo.saveAll(users);
             System.out.println("Сид юзерів завершено!");
         }
 
