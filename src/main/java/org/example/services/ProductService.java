@@ -75,6 +75,15 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    public PaginationResponse<ProductDto> getProducts(int page, int size, Long[] ids) {
+        PageRequest pageRequest = PageRequest.of(
+                page, size, Sort.by("id"));
+        Page<Product> productsPage = repo.getProducts(ids,pageRequest);
+        Iterable<ProductDto> categories = mapper.toDto(productsPage.getContent());
+        return  new PaginationResponse<ProductDto>(categories,productsPage.getTotalElements());
+    }
+
+    @Override
     public PaginationResponse<ProductDto> searchProducts(SearchData searchData) {
         Sort.Direction direction = Objects.equals(searchData.getSortDir(), "descend") ? Sort.Direction.DESC: Sort.Direction.ASC;
         PageRequest pageRequest = PageRequest.of(

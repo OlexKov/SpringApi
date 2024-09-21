@@ -23,5 +23,10 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
             Pageable pageable);
 
     @EntityGraph(attributePaths = {"category"})
+    @Query("SELECT p FROM Product p WHERE p.id IN :ids")
+    Page<Product> getProducts(
+            @Param("ids") Long[] ids ,Pageable pageable);
+
+    @EntityGraph(attributePaths = {"category"})
     Page<Product> findAll(Pageable pageable);
 }

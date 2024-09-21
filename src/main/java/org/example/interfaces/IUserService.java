@@ -1,6 +1,7 @@
 package org.example.interfaces;
 
 
+import org.example.dtos.ProductDto;
 import org.example.dtos.UserDto;
 import org.example.entities.User;
 import org.example.models.PaginationResponse;
@@ -18,4 +19,7 @@ public interface IUserService extends UserDetailsService {
     boolean update(UserCreationModel productModel) throws IOException;
     User getByUsername(String userName);
     UserDetailsService userDetailsService();
+    Long addToFavorite(Long id);
+    Long removeFromFavorite(Long id);
+    PaginationResponse<ProductDto> getFavorite();
 }

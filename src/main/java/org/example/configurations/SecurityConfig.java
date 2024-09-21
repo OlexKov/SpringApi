@@ -54,6 +54,10 @@ public class SecurityConfig{
                                 "/api/category/create/**",
                                 "/api/category/update/**",
                                 "/api/category/delete/**").hasAuthority(Roles.Admin.toString())
+                        .requestMatchers(
+                                "/api/auth/add-favorite/**",
+                                "/api/auth/remove-favorite/**",
+                                "/api/auth/get-favorites/**").hasAuthority(Roles.User.toString())
                         .anyRequest().permitAll())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())

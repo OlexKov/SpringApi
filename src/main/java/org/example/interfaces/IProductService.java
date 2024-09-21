@@ -12,6 +12,7 @@ import java.io.IOException;
 public interface IProductService {
     Long saveProduct(ProductCreationModel productModel);
     PaginationResponse<ProductDto> getProducts(int page,int size);
+    PaginationResponse<ProductDto> getProducts(int page,int size,Long[] ids);
     PaginationResponse<ProductDto> searchProducts(SearchData searchData);
     ProductDto getProductById(Long id);
     boolean deleteProductById(Long id) throws IOException;

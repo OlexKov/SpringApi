@@ -1,13 +1,15 @@
 package org.example.services;
 
 import lombok.RequiredArgsConstructor;
+import org.example.dtos.ProductDto;
 import org.example.dtos.UserDto;
+import org.example.entities.Product;
 import org.example.entities.User;
 import org.example.entities.UserRole;
+import org.example.exceptions.ProductException;
 import org.example.exceptions.UserException;
-import org.example.interfaces.IUserRepository;
-import org.example.interfaces.IUserRolesRepository;
-import org.example.interfaces.IUserService;
+import org.example.interfaces.*;
+import org.example.mapping.ProductMapper;
 import org.example.mapping.UserMapper;
 import org.example.models.FileFormats;
 import org.example.models.PaginationResponse;
@@ -17,6 +19,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,17 +29,21 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService {
     private final IUserRepository userRepo;
     private final UserMapper mapper;
+    private final ProductMapper ProductMapper;
     private final StorageService storageService;
     private final IUserRolesRepository rolesRepo;
     private final PasswordEncoder passwordEncoder;
+    private final IProductRepository productRepo;
 
     @Override
     public Long create(UserCreationModel userModel) {
@@ -70,6 +78,60 @@ public class UserService implements IUserService {
     public UserDetailsService userDetailsService() {
         return this::getByUsername;
     }
+
+    @Override
+    public Long addToFavorite(Long id) {
+        var optProduct = productRepo.findById(id);
+        if(optProduct.isPresent()){
+            Long userId =  ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+            var optUser = userRepo.findById(userId);
+            if(optUser.isPresent()){
+                var user = optUser.get();
+                var favoriteProducts = user.getFavoriteProducts();
+                favoriteProducts.add(optProduct.get());
+                user.setFavoriteProducts(favoriteProducts);
+                userRepo.save(user);
+                return id;
+            }
+            else{
+                 throw new UserException("Error");
+            }
+        }
+        else{
+            throw new ProductException("Invalid product id");
+        }
+    }
+
+    @Override
+    public Long removeFromFavorite(Long id) {
+        Long userId =  ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        var optUser = userRepo.findById(userId);
+        if(optUser.isPresent()){
+            var user = optUser.get();
+            var favoriteProducts = user.getFavoriteProducts();
+            favoriteProducts = favoriteProducts.stream().filter(x-> !Objects.equals(x.getId(), id)).collect(Collectors.toSet());
+            user.setFavoriteProducts(favoriteProducts);
+            userRepo.save(user);
+            return id;
+        }
+        else{
+            throw new UserException("Error");
+        }
+    }
+
+    @Override
+    public PaginationResponse<ProductDto> getFavorite() {
+        Long userId =  ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        var optUser = userRepo.findById(userId);
+        if(optUser.isPresent()){
+            var favoriteProducts = optUser.get().getFavoriteProducts();
+            return new PaginationResponse<ProductDto>(ProductMapper.toDto(favoriteProducts),favoriteProducts.size());
+        }
+        else{
+            throw new UserException("Error");
+        }
+    }
+
 
     @Override
     public PaginationResponse<UserDto> getUsers(int page, int size) {
@@ -124,4 +186,6 @@ public class UserService implements IUserService {
     public boolean update(UserCreationModel productModel) throws IOException {
         return false;
     }
+
+
 }

@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @RestController
 @RequestMapping(value = "api/product",produces = "application/json")
@@ -39,6 +40,11 @@ public class ProductController {
     @GetMapping("/get/{page}/{size}")
     public PaginationResponse<ProductDto> getProducts(@PathVariable int page, @PathVariable int size) {
         return productService.getProducts(page,size);
+    }
+
+    @PostMapping(value ="/get/{page}/{size}" )
+    public PaginationResponse<ProductDto> getProducts(@PathVariable int page, @PathVariable int size,@RequestBody Long[] ids) {
+        return productService.getProducts(page,size,ids);
     }
 
 
