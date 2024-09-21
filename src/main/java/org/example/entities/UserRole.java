@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tbl_user_roles")
@@ -21,5 +23,5 @@ public class UserRole {
     private String name;
 
     @ManyToMany(mappedBy = "roles")
-    private List<User> users = new ArrayList<>();
+    private Set<User> users = new HashSet<>();
 }

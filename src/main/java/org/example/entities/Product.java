@@ -2,6 +2,8 @@ package org.example.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -39,8 +41,10 @@ public class Product {
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @BatchSize(size = 20)
     private Set<ProductImage> images;
 
+    @BatchSize(size = 20)
     @ManyToMany(mappedBy = "favoriteProducts")
     private Set<User> favoriteInUsers = new HashSet<>();
 }

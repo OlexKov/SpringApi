@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +49,7 @@ public class UserService implements IUserService {
         }
 
         var user = mapper.fromCreationModel(userModel);
-        user.setRoles(List.of(rolesRepo.getByName(Roles.User.toString())));
+        user.setRoles(Set.of(rolesRepo.getByName(Roles.User.toString())));
         //
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);

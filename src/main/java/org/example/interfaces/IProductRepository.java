@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
-    @EntityGraph(attributePaths = {"category", "images","favoriteInUsers"})
+    @EntityGraph(attributePaths = {"category"})
     @Query("SELECT  p FROM Product p " +
             "WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%')) " +
             "AND LOWER(p.category.name) IN :categories " +
@@ -22,6 +22,6 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
             @Param("description") String description,
             Pageable pageable);
 
-    @EntityGraph(attributePaths = {"category", "images","favoriteInUsers"})
+    @EntityGraph(attributePaths = {"category"})
     Page<Product> findAll(Pageable pageable);
 }

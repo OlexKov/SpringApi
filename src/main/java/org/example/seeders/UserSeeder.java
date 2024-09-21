@@ -29,7 +29,7 @@ public class UserSeeder implements CommandLineRunner {
             System.out.println("Сид ролей!");
             List<UserRole> userRoles = new ArrayList<>();
             for (var role:roles){
-                userRoles.add(new UserRole(0L,role.toString(),List.of()));
+                userRoles.add(new UserRole(0L,role.toString(),Set.of()));
             }
             roleRepo.saveAll(userRoles);
             System.out.println("Сид ролей завершено!");
@@ -49,8 +49,8 @@ public class UserSeeder implements CommandLineRunner {
                             new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime(),
                             storageService.saveImage("https://picsum.photos/800/600", FileFormats.WEBP),
                             true,true,true,true,
-                            List.of(adminRole),
-                            new ArrayList<>()
+                            Set.of(adminRole),
+                            Set.of()
                     ),
                     new User(
                             0L,
@@ -62,8 +62,8 @@ public class UserSeeder implements CommandLineRunner {
                             new GregorianCalendar(2000, Calendar.APRIL, 1).getTime(),
                             storageService.saveImage("https://picsum.photos/800/600", FileFormats.WEBP),
                             true,true,true,true,
-                            List.of(userRole),
-                            new ArrayList<>()
+                            Set.of(userRole),
+                            Set.of()
                     )));
             userRepo.saveAll(users);
             System.out.println("Сид юзерів завершено!");
