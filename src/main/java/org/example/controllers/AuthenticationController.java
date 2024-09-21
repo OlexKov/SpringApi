@@ -65,7 +65,7 @@ public class AuthenticationController {
         try{
             return ResponseEntity.ok().body(userService.getFavorite());
         }catch(Exception e){
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.internalServerError().body(null);
         }
     }
 }

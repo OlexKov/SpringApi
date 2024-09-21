@@ -94,7 +94,7 @@ public class UserService implements IUserService {
                 return id;
             }
             else{
-                 throw new UserException("Error");
+                throw new UserException("Invalid user id");
             }
         }
         else{
@@ -115,7 +115,7 @@ public class UserService implements IUserService {
             return id;
         }
         else{
-            throw new UserException("Error");
+            throw new UserException("Invalid user id");
         }
     }
 
@@ -128,7 +128,7 @@ public class UserService implements IUserService {
             return new PaginationResponse<ProductDto>(ProductMapper.toDto(favoriteProducts),favoriteProducts.size());
         }
         else{
-            throw new UserException("Error");
+            throw new UserException("Invalid user id");
         }
     }
 
