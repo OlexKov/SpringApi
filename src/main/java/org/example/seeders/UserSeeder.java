@@ -49,7 +49,8 @@ public class UserSeeder implements CommandLineRunner {
                             new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime(),
                             storageService.saveImage("https://picsum.photos/800/600", FileFormats.WEBP),
                             true,true,true,true,
-                            List.of(adminRole)
+                            List.of(adminRole),
+                            new ArrayList<>()
                     ),
                     new User(
                             0L,
@@ -61,7 +62,8 @@ public class UserSeeder implements CommandLineRunner {
                             new GregorianCalendar(2000, Calendar.APRIL, 1).getTime(),
                             storageService.saveImage("https://picsum.photos/800/600", FileFormats.WEBP),
                             true,true,true,true,
-                            List.of(userRole)
+                            List.of(userRole),
+                            new ArrayList<>()
                     )));
             userRepo.saveAll(users);
             System.out.println("Сид юзерів завершено!");

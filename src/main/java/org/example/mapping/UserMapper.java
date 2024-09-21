@@ -6,6 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
+import java.util.Set;
 
 
 @Mapper(componentModel = "spring",uses = {UserRoleMapper.class})
@@ -15,4 +16,9 @@ public interface UserMapper {
     User fromCreationModel(UserCreationModel userModel);
     UserDto toDto(User user);
     List<UserDto> toDto(Iterable<User> users);
+    default Long userToId(User user) {
+        return user != null ? user.getId() : null;
+    }
+    List<Long> usersToIds(Iterable<User> users);
+
 }

@@ -1,8 +1,6 @@
 package org.example.dtos;
-
 import lombok.Getter;
 import lombok.Setter;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,4 +16,5 @@ public class ProductDto {
     private List<ProductImageDto> images;
     private Long categoryId;
     private String categoryName;
+    private List<Long> favoriteInUsers;
 }

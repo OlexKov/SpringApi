@@ -3,7 +3,10 @@ package org.example.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -36,5 +39,8 @@ public class Product {
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<ProductImage> images;
+    private Set<ProductImage> images;
+
+    @ManyToMany(mappedBy = "favoriteProducts")
+    private Set<User> favoriteInUsers = new HashSet<>();
 }

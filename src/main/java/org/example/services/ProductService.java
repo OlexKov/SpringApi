@@ -35,7 +35,7 @@ public class ProductService implements IProductService {
         try{
             Product product = mapper.fromCreationModel(productModel);
             product.setId(0L);
-            List<ProductImage> images = new ArrayList<>();
+            Set<ProductImage> images = new HashSet<>();
             int index = 0;
             LocalDateTime date = LocalDateTime.now();
             for(var file:productModel.getFiles()){
@@ -118,7 +118,7 @@ public class ProductService implements IProductService {
             Product product = mapper.fromCreationModel(productModel);
             var oldImages = new ArrayList<>(optProduct.get().getImages());
             product.setCreationTime(LocalDateTime.now());
-            List<ProductImage> newImagesList = new ArrayList<ProductImage>() ;
+            Set<ProductImage> newImagesList = new HashSet<>() ;
             if(productModel.getFiles() != null) {
                 int index = -1;
                 for (var file : productModel.getFiles()) {
