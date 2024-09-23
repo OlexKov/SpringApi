@@ -21,5 +21,5 @@ public interface IUserService extends UserDetailsService {
     UserDetailsService userDetailsService();
     Long addToFavorite(Long id);
     Long removeFromFavorite(Long id);
-    PaginationResponse<ProductDto> getFavorite();
+    PaginationResponse<ProductDto> getFavorite(int page,int size);
 }

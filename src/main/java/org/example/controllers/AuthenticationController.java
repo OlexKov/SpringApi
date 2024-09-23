@@ -60,10 +60,10 @@ public class AuthenticationController {
         }
     }
 
-    @GetMapping(value ="/get-favorites")
-    public  ResponseEntity<PaginationResponse<ProductDto>> getFavorite() {
+    @GetMapping(value ="/get-favorites/{page}/{size}")
+    public  ResponseEntity<PaginationResponse<ProductDto>> getFavorite(@PathVariable int page,  @PathVariable int size) {
         try{
-            return ResponseEntity.ok().body(userService.getFavorite());
+            return ResponseEntity.ok().body(userService.getFavorite(page,size));
         }catch(Exception e){
             return ResponseEntity.internalServerError().body(null);
         }

@@ -120,12 +120,22 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public PaginationResponse<ProductDto> getFavorite() {
+    public PaginationResponse<ProductDto> getFavorite(int page,int size) {
         Long userId =  ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         var optUser = userRepo.findById(userId);
         if(optUser.isPresent()){
-            var favoriteProducts = optUser.get().getFavoriteProducts();
-            return new PaginationResponse<ProductDto>(ProductMapper.toDto(favoriteProducts),favoriteProducts.size());
+            var allFProducts = optUser.get().getFavoriteProducts();
+            var total = allFProducts.size();
+            if (size > 0)
+            {
+                int totalPages = (int)Math.ceil( total / (double)size);
+                if (page > totalPages)
+                    page = totalPages;
+            }
+            else size = total;
+            page = page <= 0 ? 1 : page;
+            var favoriteProducts = allFProducts.stream().skip((long) (page-1) * size).limit(size).toList();
+            return new PaginationResponse<ProductDto>(ProductMapper.toDto(favoriteProducts),total);
         }
         else{
             throw new UserException("Invalid user id");
