@@ -126,14 +126,6 @@ public class UserService implements IUserService {
         if(optUser.isPresent()){
             var allFProducts = optUser.get().getFavoriteProducts();
             var total = allFProducts.size();
-            int totalPages = (int)Math.ceil( total / (double)size);
-            page = page <= 0 ? 1 : page;
-            if (size > 0)
-            {
-              if (page > totalPages)
-                    page = totalPages;
-            }
-            else size = (int)Math.ceil(total/(double)totalPages);
             var favoriteProducts = allFProducts.stream().skip((long) (page-1) * size).limit(size).toList();
             return new PaginationResponse<ProductDto>(ProductMapper.toDto(favoriteProducts),total);
         }
