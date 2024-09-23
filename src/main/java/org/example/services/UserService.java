@@ -28,10 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -100,6 +97,25 @@ public class UserService implements IUserService {
         else{
             throw new ProductException("Invalid product id");
         }
+    }
+
+    @Override
+    public int addToFavorite(Long[] ids) {
+        Long userId =  ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        var optUser = userRepo.findById(userId);
+        Set<Product> favoriteProducts = new HashSet<>();
+        if(optUser.isPresent()){
+             var products = productRepo.getProducts(ids);
+             User user = optUser.get();
+             favoriteProducts = user.getFavoriteProducts();
+             if(!products.isEmpty()){
+                favoriteProducts.addAll(products);
+                user.setFavoriteProducts(favoriteProducts);
+                userRepo.save(user);
+                return favoriteProducts.size();
+            }
+        }
+        return favoriteProducts.size();
     }
 
     @Override

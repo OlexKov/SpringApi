@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Set;
+
 @Repository
 public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
     @EntityGraph(attributePaths = {"category"})
@@ -26,6 +28,11 @@ public interface IProductRepository extends JpaRepository<Product, Long>, JpaSpe
     @Query("SELECT p FROM Product p WHERE p.id IN :ids")
     Page<Product> getProducts(
             @Param("ids") Long[] ids ,Pageable pageable);
+
+    @EntityGraph(attributePaths = {"category"})
+    @Query("SELECT p FROM Product p WHERE p.id IN :ids")
+    Set<Product> getProducts(
+            @Param("ids") Long[] ids );
 
     @EntityGraph(attributePaths = {"category"})
     Page<Product> findAll(Pageable pageable);

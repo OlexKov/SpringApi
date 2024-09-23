@@ -50,6 +50,16 @@ public class AuthenticationController {
         }
     }
 
+    @PostMapping(value ="/add-favorite")
+    public  ResponseEntity<Integer> addFavorites(@RequestBody Long[] ids ) {
+        try{
+            int result = userService.addToFavorite(ids);
+            return ResponseEntity.ok().body(result);
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
     @PostMapping(value ="/remove-favorite/{id}")
     public  ResponseEntity<Long> removeFavorite(@PathVariable Long id ) {
         try{
