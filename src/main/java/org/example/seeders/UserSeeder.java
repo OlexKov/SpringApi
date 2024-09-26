@@ -49,6 +49,7 @@ public class UserSeeder implements CommandLineRunner {
                             new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime(),
                             storageService.saveImage("https://picsum.photos/800/600", FileFormats.WEBP),
                             true,true,true,true,
+                            Set.of(),
                             Set.of(adminRole),
                             Set.of()
                     ),
@@ -62,6 +63,7 @@ public class UserSeeder implements CommandLineRunner {
                             new GregorianCalendar(2000, Calendar.APRIL, 1).getTime(),
                             storageService.saveImage("https://picsum.photos/800/600", FileFormats.WEBP),
                             true,true,true,true,
+                            Set.of(),
                             Set.of(userRole),
                             Set.of()
                     )));

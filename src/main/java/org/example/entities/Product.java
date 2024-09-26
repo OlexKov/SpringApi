@@ -40,9 +40,13 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @BatchSize(size = 20)
-    private Set<ProductImage> images;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<CartProduct> inUsersCart = new HashSet<>();
+
+    @BatchSize(size = 20)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<ProductImage> images = new HashSet<>();
 
     @BatchSize(size = 20)
     @ManyToMany(mappedBy = "favoriteProducts")

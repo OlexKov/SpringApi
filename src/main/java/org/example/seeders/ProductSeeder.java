@@ -84,6 +84,7 @@ public class ProductSeeder implements CommandLineRunner {
                                 faker.number().randomDouble(2, 0, 20),
                                 category,
                                 Set.of(),
+                                Set.of(),
                                 Set.of()
                         );
 

@@ -1,20 +1,21 @@
 package org.example.services;
 
 import lombok.RequiredArgsConstructor;
+import org.example.dtos.CartProductDto;
+import org.example.dtos.CategoryDto;
 import org.example.dtos.ProductDto;
 import org.example.dtos.UserDto;
+import org.example.entities.CartProduct;
 import org.example.entities.Product;
 import org.example.entities.User;
 import org.example.entities.UserRole;
 import org.example.exceptions.ProductException;
 import org.example.exceptions.UserException;
 import org.example.interfaces.*;
+import org.example.mapping.CartProductMapper;
 import org.example.mapping.ProductMapper;
 import org.example.mapping.UserMapper;
-import org.example.models.FileFormats;
-import org.example.models.PaginationResponse;
-import org.example.models.Roles;
-import org.example.models.UserCreationModel;
+import org.example.models.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.*;
@@ -41,6 +43,8 @@ public class UserService implements IUserService {
     private final IUserRolesRepository rolesRepo;
     private final PasswordEncoder passwordEncoder;
     private final IProductRepository productRepo;
+    private final ICartProductRepository cartProductRepo;
+    private final CartProductMapper cartProductMapper;
 
     @Override
     public Long create(UserCreationModel userModel) {
@@ -116,6 +120,84 @@ public class UserService implements IUserService {
             }
         }
         return favoriteProducts.size();
+    }
+
+    @Override
+    @Transactional
+    public int addToCart(Long id) {
+        Long userId =  ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        var optUser = userRepo.findById(userId);
+        Set<CartProduct> cart = Set.of();
+        if(optUser.isPresent()){
+            var product = productRepo.findById(id);
+            if(product.isPresent()){
+                User user = optUser.get();
+                cart = user.getCart();
+                cart.add(new CartProduct(null,optUser.get(),product.get(),1));
+            }
+            else{
+                throw new ProductException("Invalid product id");
+            }
+        }
+        return cart.size();
+    }
+
+    @Override
+    @Transactional
+    public int removeFromCart(Long id) {
+        Long userId =  ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        var optUser = userRepo.findById(userId);
+        if(optUser.isPresent()){
+            User user = optUser.get();
+            var cart = user.getCart();
+            cart.removeIf(x->Objects.equals(x.getProduct().getId(), id));
+            return cart.size();
+        }
+        return 0;
+    }
+
+    @Override
+    public Iterable<CartProductDto> getCart() {
+        Long userId =  ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        var optUser = userRepo.findById(userId);
+        if(optUser.isPresent()) {
+            User user = optUser.get();
+            return cartProductMapper.toDto(user.getCart());
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public int addAllToCart(CartProductModel[] data) {
+        Long userId =  ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        var optUser = userRepo.findById(userId);
+        var cart = new HashSet<CartProduct>();
+        if(optUser.isPresent()){
+            User user = optUser.get();
+            for (var item:data){
+                var product = productRepo.findById(item.getId()) ;
+                product.ifPresent(value -> cart.add(new CartProduct(null, user, value, item.getCount())));
+            }
+            if(!cart.isEmpty()){
+                cart.addAll(user.getCart());
+            }
+        }
+        return cart.size();
+    }
+
+    @Override
+    public void setCartProductCount(Long id, int count) {
+        Long userId =  ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        var optUser = userRepo.findById(userId);
+        if(optUser.isPresent()) {
+            User user = optUser.get();
+            var cartProduct = user.getCart().stream().filter(x->Objects.equals(x.getProduct().getId(),id)).findFirst().orElse(null);
+            if(cartProduct != null){
+                cartProduct.setCount(count);
+                userRepo.save(user);
+            }
+        }
     }
 
     @Override

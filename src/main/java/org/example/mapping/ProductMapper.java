@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import java.util.List;
 
-@Mapper(componentModel = "spring",uses = {ProductImageMapper.class,UserMapper.class})
+@Mapper(componentModel = "spring",uses = {ProductImageMapper.class,UserMapper.class,CartProductMapper.class})
 public interface ProductMapper {
     Product fromCreationModel(ProductCreationModel productModel);
     @Mapping(target = "categoryId", source = "category.id")

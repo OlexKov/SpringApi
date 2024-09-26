@@ -6,7 +6,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
-import java.util.Set;
 
 
 @Mapper(componentModel = "spring",uses = {UserRoleMapper.class})
@@ -20,5 +19,4 @@ public interface UserMapper {
         return user != null ? user.getId() : null;
     }
     List<Long> usersToIds(Iterable<User> users);
-
 }

@@ -51,6 +51,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private boolean isEnabled;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL ,orphanRemoval = true)
+    private Set<CartProduct> cart =  new HashSet<>();
+
     @ManyToMany()
     @JoinTable(name = "tbl_user_user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

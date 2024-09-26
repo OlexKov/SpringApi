@@ -17,4 +17,5 @@ public class ProductDto {
     private Long categoryId;
     private String categoryName;
     private List<Long> favoriteInUsers;
+    private List<Long> inUsersCart;
 }

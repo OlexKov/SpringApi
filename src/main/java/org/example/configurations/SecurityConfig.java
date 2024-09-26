@@ -57,7 +57,12 @@ public class SecurityConfig{
                         .requestMatchers(
                                 "/api/auth/add-favorite/**",
                                 "/api/auth/remove-favorite/**",
-                                "/api/auth/get-favorites/**").hasAuthority(Roles.User.toString())
+                                "/api/auth/get-favorites/**",
+                                "/api/auth/add-to-cart/**",
+                                "/api/auth/remove-from-cart/**",
+                                "/api/auth/get-cart/**",
+                                "/api/auth/set-count/**"
+                                ).hasAuthority(Roles.User.toString())
                         .anyRequest().permitAll())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
