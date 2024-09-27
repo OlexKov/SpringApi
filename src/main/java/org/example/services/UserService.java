@@ -172,15 +172,15 @@ public class UserService implements IUserService {
     public int addAllToCart(CartProductModel[] data) {
         Long userId =  ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         var optUser = userRepo.findById(userId);
-        var cart = new HashSet<CartProduct>();
+        Set<CartProduct> cart = Set.of();
         if(optUser.isPresent()){
             User user = optUser.get();
+            cart = user.getCart();
             for (var item:data){
                 var product = productRepo.findById(item.getId()) ;
-                product.ifPresent(value -> cart.add(new CartProduct(null, user, value, item.getCount())));
-            }
-            if(!cart.isEmpty()){
-                cart.addAll(user.getCart());
+                if(product.isPresent() && cart.stream().noneMatch(x-> Objects.equals(x.getProduct().getId(), item.getId()))){
+                    cart.add(new CartProduct(null, user, product.get(), item.getCount()));
+                }
             }
         }
         return cart.size();
