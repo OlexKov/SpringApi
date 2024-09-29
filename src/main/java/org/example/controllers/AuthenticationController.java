@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "api/auth",produces = "application/json")
@@ -33,6 +35,16 @@ public class AuthenticationController {
         try{
             var response  = authenticationService.signIn(request);
             return ResponseEntity.ok().body(response);
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PostMapping(value ="/sign-in/google")
+    public  ResponseEntity<AuthenticationResponse> signInGoogle(@RequestBody Map<String, String> request) {
+        try{
+            var response  = authenticationService.signInGoogle(request.get("token"));
+            return response != null? ResponseEntity.ok().body(response) : ResponseEntity.badRequest().body(null);
         }catch(Exception e){
             return ResponseEntity.badRequest().body(null);
         }
