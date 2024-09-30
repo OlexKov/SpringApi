@@ -38,7 +38,10 @@ public class AuthenticationService implements IAuthenticationService {
 
     @Override
     public Long registration(UserCreationModel model) {
-        return userService.create(model);
+        if(checkRecaptcha(model.getRecaptchaToken())){
+            return userService.create(model);
+        }
+        return null;
     }
 
     @Override

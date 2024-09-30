@@ -24,7 +24,7 @@ public class AuthenticationController {
     public ResponseEntity<String> signUp(@ModelAttribute @Valid UserCreationModel model) {
         try{
             Long id  = authenticationService.registration(model);
-            return ResponseEntity.ok().body(id.toString());
+            return id != null? ResponseEntity.ok().body(id.toString()):ResponseEntity.badRequest().body("Error reCaptcha validation");
         }catch(Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
