@@ -11,4 +11,5 @@ public interface IAuthenticationService {
     Long registration(UserCreationModel model);
     AuthenticationResponse signIn(SignInRequest request);
     AuthenticationResponse signInGoogle(String code) throws IOException;
+    boolean checkRecaptcha(String rToken);
 }

@@ -34,7 +34,7 @@ public class AuthenticationController {
     public  ResponseEntity<AuthenticationResponse> signIn(@ModelAttribute @Valid SignInRequest request) {
         try{
             var response  = authenticationService.signIn(request);
-            return ResponseEntity.ok().body(response);
+            return response != null ?ResponseEntity.ok().body(response):ResponseEntity.badRequest().body(null);
         }catch(Exception e){
             return ResponseEntity.badRequest().body(null);
         }
