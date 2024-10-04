@@ -3,6 +3,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.example.entities.User;
 import org.example.interfaces.*;
+import org.example.interfaces.repositories.IUserRepository;
+import org.example.interfaces.repositories.IUserRolesRepository;
 import org.example.models.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;

@@ -5,7 +5,7 @@ import org.example.entities.Invoice;
 import org.example.exceptions.InvoiceNotFoundException;
 import org.example.interfaces.IInvoiceService;
 import org.example.interfaces.IStorageService;
-import org.example.interfaces.InvoiceRepository;
+import org.example.interfaces.repositories.InvoiceRepository;
 import org.example.mapping.InvoiceMapper;
 import org.example.models.InvoiceCreationModel;
 import org.example.models.PaginationResponse;

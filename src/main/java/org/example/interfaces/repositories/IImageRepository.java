@@ -1,4 +1,4 @@
-package org.example.interfaces;
+package org.example.interfaces.repositories;
 
 import org.example.entities.ProductImage;
 import org.springframework.data.jpa.repository.JpaRepository;

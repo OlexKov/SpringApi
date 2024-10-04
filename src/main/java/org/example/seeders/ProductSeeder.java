@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import org.example.entities.Category;
 import org.example.entities.Product;
 import org.example.entities.ProductImage;
-import org.example.interfaces.ICategoryRepository;
+import org.example.interfaces.repositories.ICategoryRepository;
 import org.example.interfaces.IStorageService;
 import org.example.models.FileFormats;
 import org.springframework.boot.CommandLineRunner;

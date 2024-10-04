@@ -1,4 +1,4 @@
-package org.example.interfaces;
+package org.example.interfaces.repositories;
 
 import org.example.entities.User;
 import org.springframework.data.jpa.repository.EntityGraph;

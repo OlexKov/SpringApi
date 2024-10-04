@@ -5,6 +5,9 @@ import org.example.entities.Product;
 import org.example.entities.ProductImage;
 import org.example.exceptions.ProductException;
 import org.example.interfaces.*;
+import org.example.interfaces.repositories.ICategoryRepository;
+import org.example.interfaces.repositories.IImageRepository;
+import org.example.interfaces.repositories.IProductRepository;
 import org.example.mapping.ProductMapper;
 import org.example.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService implements IProductService {
