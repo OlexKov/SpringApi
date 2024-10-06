@@ -5,8 +5,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.example.entities.Area;
 import org.example.entities.Region;
 import org.example.entities.Settlement;
+import org.example.entities.Warehouse;
 import org.example.interfaces.INewPostApiService;
 import org.example.mapping.AreaModelMapper;
 import org.example.mapping.RegionMadelMapper;
@@ -205,7 +207,7 @@ public class NewPostApiService implements INewPostApiService {
                 settlementsCount.addAndGet(regionSettlementsEntities.size());
                 areaRegionsEntities.add(areaRegionEntity);
             });
-            var areaCenter = settlementModelMapper.fromModel(data.getSettlements().parallelStream().filter(x->Objects.equals(x.getRef(),item.getAreasCenter())).findFirst().orElse(null));
+            var areaCenter = settlementModelMapper.fromModel(data.getSettlements().parallelStream().filter(x->Objects.equals(x.getRef(),item.getAreasCenter())).findFirst().orElse(null));//??
             areaEntity.setAreaCenter(areaCenter);//???
             areaEntity.setRegions(areaRegionsEntities);
             if(update){
