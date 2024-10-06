@@ -12,6 +12,7 @@ public interface RegionMadelMapper {
     @Mapping(target = "area", ignore = true)
     @Mapping(target = "regionCenter", ignore = true)
     @Mapping(target = "id", source = "ref")
+    @Mapping(target = "regionType", source = "regionType")
     Region fromModel(RegionModel model);
     Set<Region> fromModel(Iterable<RegionModel> models);
 }

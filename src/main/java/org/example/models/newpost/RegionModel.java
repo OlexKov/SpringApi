@@ -19,6 +19,7 @@ public class RegionModel {
     private String description;
     @JsonProperty("AreasCenter")
     private String regionCenter;
-
+    @JsonProperty("RegionType")
+    private String regionType;
     private String area;
 }

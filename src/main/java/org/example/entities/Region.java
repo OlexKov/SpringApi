@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.BatchSize;
+
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,14 +20,16 @@ public class Region {
     @Id
     private String id;
     private String description;
-    @ManyToOne
+    private String regionType;
+
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "area_id")
     private Area area;
 
-    @ManyToOne
-    @JoinColumn(name = "region_center_id", referencedColumnName = "id",nullable = true)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "settlement_id",nullable = true)
     private Settlement regionCenter;
 
-    @OneToMany(mappedBy = "region", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "region",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Settlement> settlements = new HashSet<>();
 }

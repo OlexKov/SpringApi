@@ -15,7 +15,7 @@ public class Warehouse {
     private String description;
     private String phone;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "settlement_id",nullable = true)
     private Settlement settlement;
 }

@@ -1,7 +1,6 @@
 package org.example.entities;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,14 +15,10 @@ public class Area {
     private String id;
     private String description;
 
-    @OneToOne
-    @JoinColumn(name = "area_center_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "settlement_id")
     private Settlement areaCenter;
 
-    @OneToMany(mappedBy = "area", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "area",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Region> regions = new HashSet<>();
-
-//    @BatchSize(size = 20)
-//    @OneToMany(mappedBy = "area", cascade = CascadeType.ALL)
-//    private Set<Settlement>  settlements = new HashSet<>();
 }

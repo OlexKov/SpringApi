@@ -15,4 +15,6 @@ public class MethodProperties {
     private int limit;
     @JsonProperty("AreaRef")
     private String areaId ;
+    @JsonProperty("RegionRef")
+    private String regionId;
 }

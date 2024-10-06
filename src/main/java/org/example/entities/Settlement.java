@@ -19,21 +19,18 @@ public class Settlement {
     private String description;
     private String settlementTypeDescription;
 
-//    @ManyToOne
-//    @JoinColumn(name = "area_id",nullable = false)
-//    private Area area ;
-
-
     @OneToOne(mappedBy = "areaCenter", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
     private Area centerArea ;
 
     @OneToOne(mappedBy = "regionCenter", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
     private Region centerRegion;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id")
     private Region region;
 
-    @OneToMany(mappedBy = "settlement", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "settlement", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Warehouse> warehouses = new HashSet<>();
 }
